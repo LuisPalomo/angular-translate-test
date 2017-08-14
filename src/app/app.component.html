@@ -1,12 +1,12 @@
 <div class="jumbotron">
   <h1 class="display-3">{{ 'home.jumbotron.title' | translate }}</h1>
   <p class="lead">{{ 'home.jumbotron.description' | translate }}</p>
-  <div class="btn-group" role="group" aria-label="Basic example">
-    <button type="button" class="btn btn-secondary" (click)="translateService.use('ca')">
+   <div class="btn-group" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-secondary active" [ngClass]="{'active': translateService.currentLang === 'ca'}" (click)="translateService.use('ca')">
       {{ 'common.button.catalan' | translate }}
     </button>
-    <button type="button" class="btn btn-secondary" (click)="translateService.use('es')">
+    <button type="button" class="btn btn-secondary" [ngClass]="{'active': translateService.currentLang === 'es'}" (click)="translateService.use('es')">
       {{ 'common.button.spanish' | translate }}
     </button>
-  </div>
+  </div> 
 </div>

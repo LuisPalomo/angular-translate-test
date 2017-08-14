@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
+const LANGUAGE_CATALAN = 'ca';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,9 +15,9 @@ export class AppComponent {
   ) {
     // The deault language will be Català. This language will be used as
     // a fallback when a translation isn't found in the current language
-    translateService.setDefaultLang('ca');
+    translateService.setDefaultLang(LANGUAGE_CATALAN);
 
-    // Lang to use
-    translateService.use('ca');
+    // Lang to use initially
+    translateService.use(LANGUAGE_CATALAN);
   }
 }
