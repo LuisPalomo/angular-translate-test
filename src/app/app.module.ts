@@ -4,7 +4,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
 import { AppComponent } from './app.component';
-import { ExternalTranslationLoader } from './external-translation-loader/external-translation-loader';
+import { ExternalTranslationLoader } from './external-translation-loader';
 
 const API_URL = 'http://localhost:8080/api/translations';
 
