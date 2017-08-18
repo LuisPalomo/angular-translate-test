@@ -22,7 +22,7 @@ export class AppComponent {
     // Lang to use initially
     translateService.use(LANGUAGE_CATALAN);
 
-    // Request for the proper translations everytime a navigation starts
+    // Request for the proper translations everytime a navigation ends
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.translateService.use(this.translateService.currentLang.split('.')[0] + '.' + event.url.split('/')[1]);
@@ -31,8 +31,9 @@ export class AppComponent {
   }
 
   changeLanguage(lang: string): void {
-    // This is for loading the common translations
-    this.translateService.use(lang);
-    this.translateService.use(lang + '.' + this.router.url.split('/')[1]);
+    // First load the common translations and then, the view translations
+    this.translateService.use(lang).subscribe(() => {
+      this.translateService.use(lang + '.' + this.router.url.split('/')[1]);
+    });
   }
 }
