@@ -13,6 +13,15 @@ app.use(cors());
 var translations = {};
 translations.ca = require('./i18n/ca');
 translations.es = require('./i18n/es');
+var viewTranslations = {};
+viewTranslations.ca = {
+    'init': require('./i18n/ca.init'),
+    'test': require('./i18n/ca.test')
+};
+viewTranslations.es = {
+    'init': require('./i18n/es.init'),
+    'test': require('./i18n/es.test')
+};
 
 var port = process.env.PORT || 8080;        // set our port
 
@@ -30,9 +39,18 @@ router.get('/', function(req, res) {
 // ----------------------------------------------------
 router.route('/translations')
 
-    // get the default translations, Catalan by default (accessed at GET http://localhost:8080/api/translations)
+    // get the translations by query params, Catalan by default (accessed at GET http://localhost:8080/api/translations?view=...&locale=...)
     .get(function(req, res) {
-        res.json(translations.ca);
+        if (req.query && req.query.locale) {
+            if (req.query.view) {
+                res.json(viewTranslations[req.query.locale][req.query.view]);
+            } else {
+                res.json(translations[req.query.locale]);
+            }
+        } else {
+            // default translation
+            res.json(translations.ca);
+        }
     });
 
 // on routes that end in /translations/:language_code
