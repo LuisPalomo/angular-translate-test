@@ -15,10 +15,10 @@
     </ul>
 
     <div class="btn-group" role="group" aria-label="Basic example">
-      <button type="button" class="btn btn-secondary active" [ngClass]="{'active': translateService.currentLang === 'ca'}" (click)="translateService.use('ca')">
+      <button type="button" class="btn btn-secondary active" [ngClass]="{'active': translateService.currentLang.startsWith('ca')}" (click)="changeLanguage('ca')">
         {{ 'common.button.catalan' | translate }}
       </button>
-      <button type="button" class="btn btn-secondary" [ngClass]="{'active': translateService.currentLang === 'es'}" (click)="translateService.use('es')">
+      <button type="button" class="btn btn-secondary" [ngClass]="{'active': translateService.currentLang.startsWith('es')}" (click)="changeLanguage('es')">
         {{ 'common.button.spanish' | translate }}
       </button>
     </div>

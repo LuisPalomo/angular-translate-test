@@ -13,15 +13,18 @@ export class IncrementalTranslationLoader implements TranslateLoader {
         this.translationsCache = {};
     }
 
-    getTranslation(lang: string): Observable<any> {
-        const translateLang = this.translationsCache[lang];
-        const params: HttpParams = new HttpParams().set('locale', lang);
+    getTranslation(langView: string): Observable<any> {
+        const lang = langView.split('.')[0];
+        const view = langView.split('.')[1];
+        const langTranslations = this.translationsCache[lang];
+        const paramsLocale = new HttpParams().set('locale', lang);
+        const params: HttpParams = view ? paramsLocale.set('view', view) : paramsLocale;
 
         return this.http.get(this.apiUrl, { params })
             .map((response) => this.translationsCache[lang] = getTranslationCache(response));
 
         function getTranslationCache(response) {
-            return  (translateLang) ? { ...translateLang, ...response } : response;
+            return  (langTranslations) ? { ...langTranslations, ...response } : response;
         }
     }
 }
