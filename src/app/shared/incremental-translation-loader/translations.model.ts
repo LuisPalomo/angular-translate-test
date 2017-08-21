@@ -1,12 +1,19 @@
+import { Injectable } from '@angular/core';
+
+@Injectable()
 export class Translations {
 
-  constructor(private _cache: { [key: string]: any }) { }
+  private _model: { [key: string]: any };
 
-  get cache() {
-    return this._cache;
+  constructor() {
+    this._model = {};
   }
 
-  set cache(cache: { [key: string]: any }) {
-    this._cache = cache;
+  get model() {
+    return this._model;
+  }
+
+  set model(model: { [key: string]: any }) {
+    this._model = model;
   }
 }

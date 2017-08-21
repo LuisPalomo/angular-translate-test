@@ -6,13 +6,13 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { InitComponent, TestComponent } from './components';
-import { ExternalTranslationLoader, IncrementalTranslationLoader } from './shared';
+import { ExternalTranslationLoader, IncrementalTranslationLoader, Translations } from './shared';
 
 const API_URL = 'http://localhost:8080/api/translations';
 
 // AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
-  return new IncrementalTranslationLoader(http, API_URL);
+export function HttpLoaderFactory(http: HttpClient, translations: Translations) {
+  return new IncrementalTranslationLoader(http, translations, API_URL);
 }
 
 @NgModule({
@@ -29,11 +29,11 @@ export function HttpLoaderFactory(http: HttpClient) {
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
+        deps: [HttpClient, Translations]
       }
     })
   ],
-  providers: [],
+  providers: [Translations],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

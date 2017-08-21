@@ -1,2 +1,2 @@
 export { ExternalTranslationLoader } from './external-translation-loader';
-export { IncrementalTranslationLoader } from './incremental-translation-loader';
+export { IncrementalTranslationLoader, Translations } from './incremental-translation-loader';

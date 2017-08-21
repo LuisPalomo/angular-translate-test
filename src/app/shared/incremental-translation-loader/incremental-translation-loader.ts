@@ -5,24 +5,34 @@ import { Translations } from './translations.model';
 
 export class IncrementalTranslationLoader implements TranslateLoader {
 
-  private translations: Translations;
-
   constructor(
     private http: HttpClient,
+    private translations: Translations,
     private apiUrl: string
-  ) {
-    this.translations = new Translations({});
-  }
+  ) { }
 
   getTranslation(langView: string): Observable<any> {
-    const lang = langView.split('.')[0];
-    const view = langView.split('.')[1];
-    const paramsLocale = new HttpParams().set('locale', lang);
-    const params: HttpParams = view ? paramsLocale.set('view', view) : paramsLocale;
-    const getTranslationCache = (response) =>
-      this.translations.cache[lang] ? { ...this.translations.cache[lang], ...response } : response;
+    const [locale, view] = langView.split('.');
+    const params = this.setHttpParams({ locale, view });
 
     return this.http.get(this.apiUrl, { params })
-      .map((response) => this.translations.cache[lang] = getTranslationCache(response));
+      .map((response) => this.translations.model[locale] = this.getIncrementalTranslations(response, locale));
+  }
+
+  private setHttpParams(data: any): HttpParams {
+    let params = new HttpParams();
+
+    for (const key in data) {
+      if (data.hasOwnProperty(key) && data[key]) {
+        params = params.set(key, data[key]);
+      }
+    }
+
+    return params;
+  }
+
+  private getIncrementalTranslations(response, locale) {
+    const currentTranslations = this.translations.model[locale];
+    return currentTranslations ? { ...currentTranslations, ...response } : response;
   }
 }
