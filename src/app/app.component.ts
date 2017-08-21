@@ -32,8 +32,7 @@ export class AppComponent {
 
   changeLanguage(lang: string): void {
     // First load the common translations and then, the view translations
-    this.translateService.use(lang).subscribe(() => {
-      this.translateService.use(lang + '.' + this.router.url.split('/')[1]);
-    });
+    this.translateService.use(lang);
+    this.translateService.use(lang + '.' + this.router.url.split('/')[1]);
   }
 }
