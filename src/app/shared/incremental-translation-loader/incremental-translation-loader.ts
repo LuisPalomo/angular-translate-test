@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
+import { Translations } from './translations.model';
 import { TranslateLoader } from '@ngx-translate/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Translations } from './translations.model';
 
 export class IncrementalTranslationLoader implements TranslateLoader {
 
@@ -23,7 +23,7 @@ export class IncrementalTranslationLoader implements TranslateLoader {
     let params = new HttpParams();
 
     for (const key in data) {
-      if (data.hasOwnProperty(key) && data[key]) {
+      if (data[key]) {
         params = params.set(key, data[key]);
       }
     }
@@ -31,7 +31,7 @@ export class IncrementalTranslationLoader implements TranslateLoader {
     return params;
   }
 
-  private getIncrementalTranslations(response, locale) {
+  private getIncrementalTranslations(response: any, locale: string): any {
     const currentTranslations = this.translations.model[locale];
     return currentTranslations ? { ...currentTranslations, ...response } : response;
   }
