@@ -3,9 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
+import { InitModule } from './init';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { InitComponent, TestComponent } from './components';
 import { ExternalTranslationLoader, IncrementalTranslationLoader, Translations } from './shared';
 
 const API_URL = 'http://localhost:8080/api/translations';
@@ -18,8 +18,6 @@ export function HttpLoaderFactory(http: HttpClient, translations: Translations) 
 @NgModule({
   declarations: [
     AppComponent,
-    InitComponent,
-    TestComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +29,8 @@ export function HttpLoaderFactory(http: HttpClient, translations: Translations) 
         useFactory: HttpLoaderFactory,
         deps: [HttpClient, Translations]
       }
-    })
+    }),
+    InitModule
   ],
   providers: [Translations],
   bootstrap: [AppComponent]

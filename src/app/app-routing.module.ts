@@ -1,15 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { InitComponent, TestComponent } from './components';
 
 const routes: Routes = [
   {
-    path: 'init',
-    component: InitComponent
-  },
-  {
     path: 'test',
-    component: TestComponent
+    loadChildren: 'app/test/test.module#TestModule'
   },
   {
     path: '**',
