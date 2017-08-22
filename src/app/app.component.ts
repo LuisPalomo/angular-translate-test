@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Router, Event, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Router, Event, NavigationEnd } from '@angular/router';
 
 const LANGUAGE_CATALAN = 'ca';
 
@@ -25,7 +25,7 @@ export class AppComponent {
     // Request for the proper translations everytime a navigation ends
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
-        this._translateService.use(this._translateService.currentLang.split('.')[0] + '.' + event.url.split('/')[1]);
+        this._translateService.use(this._translateService.currentLang.split('.')[0] + '.' + event.urlAfterRedirects.split('/')[1]);
       }
     });
   }
