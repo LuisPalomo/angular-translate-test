@@ -1,13 +1,11 @@
 import { Action } from '@ngrx/store';
+import { UPDATE_STATE, ADD_TRANSLATIONS } from '../constants';
 
-export const CHANGE_LOCALE = '[Translate] Change Locale';
-export const ADD_TRANSLATIONS = '[Translate] Add Translations';
-
-export class ChangeLocale implements Action {
-  readonly type = CHANGE_LOCALE;
+export class UpdateState implements Action {
+  readonly type = UPDATE_STATE;
 
   constructor(
-    public state: { locale: string, translations: { [key: string]: string } }
+    public payload: { locale: string, translations: { [key: string]: string } }
   ) { }
 }
 
@@ -15,8 +13,8 @@ export class AddTranslations implements Action {
   readonly type = ADD_TRANSLATIONS;
 
   constructor(
-    public state: { translations: { [key: string]: string } }
+    public payload: { translations: { [key: string]: string } }
   ) { }
 }
 
-export type Actions = ChangeLocale | AddTranslations;
+export type Actions = UpdateState | AddTranslations;
