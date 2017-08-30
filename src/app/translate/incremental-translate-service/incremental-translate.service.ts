@@ -2,15 +2,15 @@ import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { TranslateService } from '@ngx-translate/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router, NavigationEnd } from '@angular/router';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import 'rxjs/add/operator/withLatestFrom';
 
 import { API_URL } from '../constants';
-import { AppState } from '../../app.state';
-import { ChangeLocale, AddTranslations } from '../actions/translate';
+import { UpdateState, AddTranslations } from '../actions/translate';
 import { TranslateState, getLocale, getTranslations } from '../reducers/translate';
+import { AppState, getTranslateLocale, getTranslateTranslations } from '../../reducers';
 
 @Injectable()
 export class IncrementalTranslateService {
@@ -25,9 +25,8 @@ export class IncrementalTranslateService {
   ) {
     this.alreadyGotten = [];
 
-    const translateState = this.store.select('translate');
-    const localeState = translateState.select(getLocale);
-    const translationsState = translateState.select(getTranslations);
+    const localeState = this.store.select(getTranslateLocale);
+    const translationsState = this.store.select(getTranslateTranslations);
 
     // Subscribe to changes on the State Locale and change the locale used by TranslateService to it
     localeState.subscribe(
@@ -55,19 +54,18 @@ export class IncrementalTranslateService {
     if (!this.alreadyGotten.includes(locale)) {
       this.getHttpTranslations(locale).subscribe(
         (translations) => {
-          const changeAction = new ChangeLocale({ locale, translations });
+          const changeAction = new UpdateState({ locale, translations });
           this.store.dispatch(changeAction);
-          const view = this.router.url.split('/')[1];
-          this.incrementTranslations(locale, view);
         },
-        this.errorHandler,
-        () => this.alreadyGotten.push(locale)
+        this.errorHandler(locale)
       );
     } else {
       const translations = this.translateService.translations[locale];
-      const changeAction = new ChangeLocale({ locale, translations });
+      const changeAction = new UpdateState({ locale, translations });
       this.store.dispatch(changeAction);
     }
+    const view = this.router.url.split('/')[1];
+    this.incrementTranslations(locale, view);
   }
 
   private incrementTranslations(locale: string, view: string): void {
@@ -77,13 +75,13 @@ export class IncrementalTranslateService {
           const addAction = new AddTranslations({ translations });
           this.store.dispatch(addAction);
         },
-        this.errorHandler,
-        () => this.alreadyGotten.push(locale + view)
+        this.errorHandler(locale + view)
       );
     }
   }
 
   private getHttpTranslations(locale: string, view = ''): Observable<{ [key: string]: string }> {
+    this.alreadyGotten.push(locale + view);
     const params = this.setHttpParams({ locale, view });
 
     return this.http.get(API_URL, { params })
@@ -103,9 +101,15 @@ export class IncrementalTranslateService {
     return params;
   }
 
-  private errorHandler(error: any): void {
-    // TODO: Define the way that errors will be handled in the app
-    console.log(JSON.stringify(error));
+  private errorHandler(alreadyGottenKey: string): (error: any) => void {
+    return (error) => {
+      const index = this.alreadyGotten.indexOf(alreadyGottenKey);
+      if (index >= 0) {
+        this.alreadyGotten.splice(index, 1);
+      }
+      // TODO: Define the way that errors will be handled in the app
+      console.log(JSON.stringify(error));
+    };
   }
 
 }

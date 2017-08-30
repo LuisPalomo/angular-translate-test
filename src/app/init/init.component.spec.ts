@@ -1,6 +1,9 @@
+import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InitComponent } from './init.component';
+import { InitRoutingModule } from './init-routing.module';
 
 describe('InitComponent', () => {
   let component: InitComponent;
@@ -8,7 +11,15 @@ describe('InitComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InitComponent ]
+      declarations: [ InitComponent ],
+      imports: [
+        CommonModule,
+        InitRoutingModule,
+        TranslateModule.forRoot()
+      ],
+      providers: [
+        TranslateService
+      ]
     })
     .compileComponents();
   }));

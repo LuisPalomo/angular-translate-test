@@ -1,30 +1,28 @@
-import { DEFAULT_LOCALE } from '../constants';
-import * as translate from '../actions/translate';
+import { Actions } from '../actions/translate';
+import { DEFAULT_LOCALE, UPDATE_STATE, ADD_TRANSLATIONS } from '../constants';
 
 export interface TranslateState {
   locale: string;
   translations: { [key: string]: string };
 }
 
-const initialState: TranslateState = {
+export const initialState: TranslateState = {
   locale: DEFAULT_LOCALE,
   translations: {}
 };
 
 export function translateReducer(
   state = initialState,
-  action: translate.Actions
+  action: Actions
 ): TranslateState {
   switch (action.type) {
-    case translate.CHANGE_LOCALE: {
-      return { ...action.state };
+    case UPDATE_STATE: {
+      return { ...state, ...action.payload };
     }
 
-    case translate.ADD_TRANSLATIONS: {
-      return {
-        locale: state.locale,
-        translations: { ...state.translations, ...action.state.translations }
-      };
+    case ADD_TRANSLATIONS: {
+      const translations = { ...state.translations, ...action.payload.translations };
+      return { ...state, translations };
     }
 
     default: {

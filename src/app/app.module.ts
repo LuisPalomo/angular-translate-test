@@ -2,12 +2,15 @@ import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
 import { InitModule } from './init';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { EmptyLoader, IncrementalTranslateService, translateReducer } from './translate';
+import { environment } from '../environments/environment';
+import { EmptyLoader, IncrementalTranslateService } from './translate';
+import { reducers } from './reducers';
 
 @NgModule({
   declarations: [
@@ -17,9 +20,8 @@ import { EmptyLoader, IncrementalTranslateService, translateReducer } from './tr
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    StoreModule.forRoot({
-      translate: translateReducer
-    }),
+    StoreModule.forRoot(reducers),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
