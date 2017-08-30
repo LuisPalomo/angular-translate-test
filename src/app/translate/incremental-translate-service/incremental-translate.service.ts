@@ -2,8 +2,8 @@ import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { TranslateService } from '@ngx-translate/core';
-import { Router, NavigationEnd } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Router, NavigationEnd, PRIMARY_OUTLET } from '@angular/router';
 
 import 'rxjs/add/operator/withLatestFrom';
 
@@ -21,7 +21,7 @@ export class IncrementalTranslateService {
     private store: Store<AppState>,
     private translateService: TranslateService,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
   ) {
     this.alreadyGotten = [];
 
@@ -43,8 +43,8 @@ export class IncrementalTranslateService {
       ([event, locale]) => {
         // TODO: Add the "isLoading" spinner and the resolve to avoid seeing the initial keys of translations
         if (event instanceof NavigationEnd) {
-          const view = event.urlAfterRedirects.split('/')[1];
-          this.incrementTranslations(locale, view);
+          const urlTree = this.router.parseUrl(event.urlAfterRedirects).root.children[PRIMARY_OUTLET];
+          this.incrementTranslations(locale, urlTree ? urlTree.segments[0].path : '');
         }
       }
     );
@@ -64,8 +64,8 @@ export class IncrementalTranslateService {
       const changeAction = new UpdateState({ locale, translations });
       this.store.dispatch(changeAction);
     }
-    const view = this.router.url.split('/')[1];
-    this.incrementTranslations(locale, view);
+    const urlTree = this.router.parseUrl(this.router.url).root.children[PRIMARY_OUTLET];
+    this.incrementTranslations(locale, urlTree ? urlTree.segments[0].path : '');
   }
 
   private incrementTranslations(locale: string, view: string): void {
