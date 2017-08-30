@@ -1,6 +1,14 @@
+import { StoreModule } from '@ngrx/store';
+import { APP_BASE_HREF } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { TestBed, async } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
 
+import { reducers } from './reducers';
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { IncrementalTranslateService } from './translate';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -8,6 +16,17 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        TranslateModule.forRoot(),
+        StoreModule.forRoot(reducers),
+      ],
+      providers: [
+        {provide: APP_BASE_HREF, useValue: '/'},
+        IncrementalTranslateService
+      ]
     }).compileComponents();
   }));
 
@@ -15,18 +34,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  }));
-
-  it(`should have as title 'app'`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app');
-  }));
-
-  it('should render title in a h1 tag', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
   }));
 });
