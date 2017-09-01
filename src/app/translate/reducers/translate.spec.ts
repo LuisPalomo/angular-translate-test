@@ -1,5 +1,5 @@
 import { UpdateState, AddTranslations } from '../actions/translate';
-import { translateReducer, initialState, TranslateState, getLocale, getTranslations } from './translate';
+import { translateReducer, initialState, TranslateState, getCurrentLang, getTranslations } from './translate';
 
 describe('TranslateReducer', () => {
   describe('undefined action', () => {
@@ -14,14 +14,14 @@ describe('TranslateReducer', () => {
 
   describe('UPDATE_STATE', () => {
     it('should update the state with the new information', () => {
-      const locale = 'en';
+      const currentLang = 'en';
       const translations = {};
-      const update = new UpdateState({ locale, translations });
+      const update = new UpdateState({ currentLang, translations });
 
       const result = translateReducer(undefined, update);
-      const expectedLocaleResult = locale;
+      const expectedLocaleResult = currentLang;
       const expectedTranslationsResult = translations;
-      expect(result.locale).toEqual(expectedLocaleResult);
+      expect(result.currentLang).toEqual(expectedLocaleResult);
       expect(result.translations).toEqual(expectedTranslationsResult);
     });
   });
@@ -33,7 +33,7 @@ describe('TranslateReducer', () => {
         t4: 't4'
       };
       const state = {
-        locale: 'en',
+        currentLang: 'en',
         translations: {
           t1: 't1',
           t2: 't2'
@@ -51,7 +51,7 @@ describe('TranslateReducer', () => {
 
 describe('Translate selectors', () => {
   const state: TranslateState = {
-    locale: 'en',
+    currentLang: 'en',
     translations: {
       t1: 't1',
       t2: 't2'
@@ -60,8 +60,8 @@ describe('Translate selectors', () => {
 
   describe('getLocale', () => {
     it('should return locale', () => {
-      const result = getLocale(state);
-      const expectedResult = state.locale;
+      const result = getCurrentLang(state);
+      const expectedResult = state.currentLang;
       expect(result).toEqual(expectedResult);
     });
   });

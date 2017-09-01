@@ -1,14 +1,18 @@
 import { Actions } from '../actions/translate';
-import { DEFAULT_LOCALE, UPDATE_STATE, ADD_TRANSLATIONS } from '../constants';
+import { DEFAULT_LANG, UPDATE_STATE, ADD_TRANSLATIONS } from '../constants';
 
 export interface TranslateState {
-  locale: string;
+  defaultLang: string;
+  currentLang: string;
   translations: { [key: string]: string };
+  langs: Array<string>;
 }
 
 export const initialState: TranslateState = {
-  locale: DEFAULT_LOCALE,
-  translations: {}
+  defaultLang: DEFAULT_LANG,
+  currentLang: DEFAULT_LANG,
+  translations: {},
+  langs: [DEFAULT_LANG]
 };
 
 export function translateReducer(
@@ -32,5 +36,7 @@ export function translateReducer(
 }
 
 // Selectors library
-export const getLocale = (state: TranslateState) => state.locale;
+export const getDefaultLang = (state: TranslateState) => state.defaultLang;
+export const getCurrentLang = (state: TranslateState) => state.currentLang;
 export const getTranslations = (state: TranslateState) => state.translations;
+export const getLangs = (state: TranslateState) => state.langs;

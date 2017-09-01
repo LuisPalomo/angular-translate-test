@@ -9,7 +9,7 @@ import 'rxjs/add/operator/withLatestFrom';
 
 import { API_URL } from '../constants';
 import { UpdateState, AddTranslations } from '../actions/translate';
-import { TranslateState, getLocale, getTranslations } from '../reducers/translate';
+import { TranslateState, getCurrentLang, getTranslations } from '../reducers/translate';
 import { AppState, getTranslateLocale, getTranslateTranslations } from '../../reducers';
 
 @Injectable()

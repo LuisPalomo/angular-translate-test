@@ -5,7 +5,7 @@ export class UpdateState implements Action {
   readonly type = UPDATE_STATE;
 
   constructor(
-    public payload: { locale: string, translations: { [key: string]: string } }
+    public payload: { currentLang: string, translations: { [key: string]: string } }
   ) { }
 }
 

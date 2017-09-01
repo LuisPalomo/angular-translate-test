@@ -6,7 +6,7 @@ import { IncrementalTranslateService } from './translate';
 import { Router, Event, NavigationEnd } from '@angular/router';
 
 import { AppState, getTranslateLocale } from './reducers';
-import { getLocale } from './translate/reducers/translate';
+import { getCurrentLang } from './translate/reducers/translate';
 import * as translateConstants from './translate/constants';
 
 @Component({
@@ -22,7 +22,7 @@ export class AppComponent {
     private store: Store<AppState>,
     private _translateService: IncrementalTranslateService
   ) {
-    this._translateService.useLocale(translateConstants.DEFAULT_LOCALE);
+    this._translateService.useLocale(translateConstants.DEFAULT_LANG);
     this.locale$ = this.store.select(getTranslateLocale);
   }
 
