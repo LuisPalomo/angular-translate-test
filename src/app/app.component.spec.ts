@@ -5,10 +5,10 @@ import { TestBed, async } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { reducers } from './reducers';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { IncrementalTranslateService } from './translate';
+import { StoreTranslateModule } from './translate/store-translate.module';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -21,11 +21,11 @@ describe('AppComponent', () => {
         HttpClientModule,
         AppRoutingModule,
         TranslateModule.forRoot(),
-        StoreModule.forRoot(reducers),
+        StoreModule.forRoot({}),
+        StoreTranslateModule,
       ],
       providers: [
-        {provide: APP_BASE_HREF, useValue: '/'},
-        IncrementalTranslateService
+        {provide: APP_BASE_HREF, useValue: '/'}
       ]
     }).compileComponents();
   }));

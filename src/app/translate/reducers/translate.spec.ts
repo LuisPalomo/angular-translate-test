@@ -1,5 +1,11 @@
 import { UpdateState, AddTranslations } from '../actions/translate';
-import { translateReducer, initialState, TranslateState, getLocale, getTranslations } from './translate';
+import {
+  translateReducer,
+  initialState,
+  TranslateState,
+  getTranslateLocale,
+  getTranslateTranslations
+} from './translate';
 
 describe('TranslateReducer', () => {
   describe('undefined action', () => {
@@ -50,26 +56,29 @@ describe('TranslateReducer', () => {
 });
 
 describe('Translate selectors', () => {
-  const state: TranslateState = {
+  const translateState: TranslateState = {
     locale: 'en',
     translations: {
       t1: 't1',
       t2: 't2'
     }
   };
+  const state = {
+    translate: translateState
+  };
 
   describe('getLocale', () => {
     it('should return locale', () => {
-      const result = getLocale(state);
-      const expectedResult = state.locale;
+      const result = getTranslateLocale(state);
+      const expectedResult = translateState.locale;
       expect(result).toEqual(expectedResult);
     });
   });
 
   describe('getTranslations', () => {
     it('should return translations', () => {
-      const result = getTranslations(state);
-      const expectedResult = state.translations;
+      const result = getTranslateTranslations(state);
+      const expectedResult = translateState.translations;
       expect(result).toEqual(expectedResult);
     });
   });

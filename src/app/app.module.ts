@@ -26,7 +26,7 @@ import { StoreTranslateModule } from './translate/store-translate.module';
     StoreTranslateModule,
     InitModule,
   ],
-  providers: [ IncrementalTranslateService ],
+  providers: [],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
