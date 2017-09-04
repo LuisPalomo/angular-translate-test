@@ -5,8 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { IncrementalTranslateService } from './translate';
 import { Router, Event, NavigationEnd } from '@angular/router';
 
-import { AppState, getTranslateLocale } from './reducers';
-import { getLocale } from './translate/reducers/translate';
+import { TranslateState, getTranslateLocale } from './translate/reducers/translate';
 import * as translateConstants from './translate/constants';
 
 @Component({
@@ -19,11 +18,11 @@ export class AppComponent {
   locale$: Observable<string>;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<TranslateState>,
     private _translateService: IncrementalTranslateService
   ) {
-    this._translateService.useLocale(translateConstants.DEFAULT_LOCALE);
-    this.locale$ = this.store.select(getTranslateLocale);
+    _translateService.useLocale(translateConstants.DEFAULT_LOCALE);
+    this.locale$ = store.select(getTranslateLocale);
   }
 
   get translateService() {

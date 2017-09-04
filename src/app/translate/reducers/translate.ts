@@ -1,3 +1,5 @@
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+
 import { Actions } from '../actions/translate';
 import { DEFAULT_LOCALE, UPDATE_STATE, ADD_TRANSLATIONS } from '../constants';
 
@@ -31,6 +33,13 @@ export function translateReducer(
   }
 }
 
-// Selectors library
-export const getLocale = (state: TranslateState) => state.locale;
-export const getTranslations = (state: TranslateState) => state.translations;
+/* Selectors */
+export const getTranslateState = createFeatureSelector<TranslateState>('translate');
+export const getTranslateLocale = createSelector(
+  getTranslateState,
+  (state: TranslateState) => state.locale
+);
+export const getTranslateTranslations = createSelector(
+  getTranslateState,
+  (state: TranslateState) => state.translations
+);

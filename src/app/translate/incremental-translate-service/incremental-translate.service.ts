@@ -9,8 +9,7 @@ import 'rxjs/add/operator/withLatestFrom';
 
 import { API_URL } from '../constants';
 import { UpdateState, AddTranslations } from '../actions/translate';
-import { TranslateState, getLocale, getTranslations } from '../reducers/translate';
-import { AppState, getTranslateLocale, getTranslateTranslations } from '../../reducers';
+import { TranslateState, getTranslateState, getTranslateLocale, getTranslateTranslations } from '../reducers/translate';
 
 @Injectable()
 export class IncrementalTranslateService {
@@ -18,32 +17,32 @@ export class IncrementalTranslateService {
   private alreadyGotten: string[];
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store<TranslateState>,
     private translateService: TranslateService,
     private router: Router,
     private http: HttpClient,
   ) {
     this.alreadyGotten = [];
 
-    const localeState = this.store.select(getTranslateLocale);
-    const translationsState = this.store.select(getTranslateTranslations);
+    const localeState = store.select(getTranslateLocale);
+    const translationsState = store.select(getTranslateTranslations);
 
     // Subscribe to changes on the State Locale and change the locale used by TranslateService to it
     localeState.subscribe(
-      (locale) => this.translateService.use(locale)
+      (locale) => translateService.use(locale)
     );
 
     // Subscribe to changes on the State Translations and add those translations to the Translate service
     translationsState.withLatestFrom(localeState).subscribe(
-      ([translations, locale]) => this.translateService.setTranslation(locale, translations, true)
+      ([translations, locale]) => translateService.setTranslation(locale, translations, true)
     );
 
     // Subscribe to Router events and increase the current translations with the new ones
-    this.router.events.withLatestFrom(localeState).subscribe(
+    router.events.withLatestFrom(localeState).subscribe(
       ([event, locale]) => {
         // TODO: Add the "isLoading" spinner and the resolve to avoid seeing the initial keys of translations
         if (event instanceof NavigationEnd) {
-          const urlTree = this.router.parseUrl(event.urlAfterRedirects).root.children[PRIMARY_OUTLET];
+          const urlTree = router.parseUrl(event.urlAfterRedirects).root.children[PRIMARY_OUTLET];
           this.incrementTranslations(locale, urlTree ? urlTree.segments[0].path : '');
         }
       }
